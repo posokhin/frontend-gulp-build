@@ -1,8 +1,5 @@
 @import '../../node_modules/normalize.css/normalize';
 
+@import './help/**/*.scss';
 
-@import './layout/_base';
-
-
-@import './help/_flex';
-@import './help/_mixins';
+@import './layout/**/*.scss';
