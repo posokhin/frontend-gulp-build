@@ -1,5 +1,6 @@
 let gulp = require('gulp'),
     sass = require('gulp-sass'),
+    sassGlob = require('gulp-sass-glob'),
     watch = require('gulp-watch'),
     concat = require("gulp-concat"), 
     autoprefixer = require('gulp-autoprefixer'),
@@ -7,12 +8,14 @@ let gulp = require('gulp'),
     pug = require('gulp-pug'),
     cleanCSS = require('gulp-clean-css'),
     gcmq = require('gulp-group-css-media-queries'),
-    svgSprite = require('gulp-svg-sprite');
+    svgSprite = require('gulp-svg-sprite'),
+    browserify = require('gulp-browserify');
     
     
 
 gulp.task('sass', function () {
     return gulp.src('src/scss/**/*.scss')
+        .pipe(sassGlob())
         .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer({
             cascade: false
@@ -56,10 +59,11 @@ gulp.task('pug', function() {
     }));
 });
 
-/* js */
-jsFiles = ['./node_modules/jquery/dist/jquery.min.js', './node_modules/imask/dist/imask.min.js','./src/js/main.js'];
+/* js *//* 
+jsFiles = ['./node_modules/jquery/dist/jquery.min.js', './node_modules/imask/dist/imask.min.js','./src/js/main.js']; */
 gulp.task('js', function () {
-    return gulp.src(jsFiles)
+    return gulp.src('./src/js/main.js')
+        .pipe(browserify())
         .pipe(gulp.dest('./public/js/'))
         .pipe(browserSync.reload({
             stream: true							
