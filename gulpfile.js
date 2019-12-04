@@ -9,7 +9,8 @@ let gulp = require('gulp'),
     cleanCSS = require('gulp-clean-css'),
     gcmq = require('gulp-group-css-media-queries'),
     svgSprite = require('gulp-svg-sprite'),
-    browserify = require('gulp-browserify');
+    browserify = require('gulp-browserify'),
+    changed = require('gulp-changed');
     
     
 
@@ -50,6 +51,7 @@ gulp.task('concat', function() {
 
 gulp.task('pug', function() {
     return gulp.src('./src/pug/*.pug')
+    .pipe(changed('public/', { extension: '.html' }))
     .pipe(pug({
         pretty: true
     }))
