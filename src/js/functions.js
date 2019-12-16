@@ -17,12 +17,13 @@ if (inputs.length) {
 
 
 /* tabs */
-$('.faq__tabs').on('click', '.faq__tabs-item:not(.faq__tabs-item.active)', function () {
-    $(this).addClass('active').siblings().removeClass('active').closest('.faq__row').find('.faq__tabs-content').removeClass('active').animate({
-        opacity: 0
-    }, 300).eq($(this).index()).addClass('active').animate({
-        opacity: 1
-    }, 300);
-    setActiveLine();
-});
+function tabs(item, parent, content) {
+    $(item).on('click', function () {
+        $(this).addClass('active').siblings().removeClass('active').closest(parent).find(content).removeClass('active').animate({
+            opacity: 0
+        }, 300).eq($(this).index()).addClass('active').animate({
+            opacity: 1
+        }, 300);
+    });
+}
 /* tabs end */
