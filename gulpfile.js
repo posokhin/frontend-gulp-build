@@ -34,7 +34,7 @@ gulp.task('sass', function () {
 gulp.task('watch', function(){
     browserSync.init({
         server: {
-            baseDir : './public/'
+            baseDir : './dist/'
         }
     });
     gulp.watch("./src/scss/**/*scss", gulp.series('sass','concat'));
@@ -44,18 +44,18 @@ gulp.task('watch', function(){
 gulp.task('concat', function() {
     return gulp.src('./src/css/main.css')
     .pipe(concat('style.css'))
-    .pipe(gulp.dest('./public/'))
+    .pipe(gulp.dest('./dist/'))
     .pipe(browserSync.stream())
 });
 
 
 gulp.task('pug', function() {
     return gulp.src('./src/pug/*.pug')
-    .pipe(changed('public/', { extension: '.html' }))
+    .pipe(changed('dist/', { extension: '.html' }))
     .pipe(pug({
         pretty: true
     }))
-    .pipe(gulp.dest('public/'))						
+    .pipe(gulp.dest('dist/'))						
     .pipe(browserSync.reload({
         stream: true							
     }));
@@ -66,7 +66,7 @@ jsFiles = ['./node_modules/jquery/dist/jquery.min.js', './node_modules/imask/dis
 gulp.task('js', function () {
     return gulp.src('./src/js/main.js')
         .pipe(browserify())
-        .pipe(gulp.dest('./public/js/'))
+        .pipe(gulp.dest('./dist/js/'))
         .pipe(browserSync.reload({
             stream: true							
         }));
@@ -76,7 +76,7 @@ gulp.task('js', function () {
 
 /* svg-sprite */
 gulp.task('svgSprite', function () {
-    return gulp.src('./public/img/**/*.svg') // svg files for sprite
+    return gulp.src('./dist/img/**/*.svg') // svg files for sprite
     .pipe(svgSprite({
             mode: {
                 stack: {
@@ -85,6 +85,6 @@ gulp.task('svgSprite', function () {
             },
         }
     ))
-    .pipe(gulp.dest('./public/img/sprite/'));
+    .pipe(gulp.dest('./dist/img/sprite/'));
 });
 /* svg-sprite end */
