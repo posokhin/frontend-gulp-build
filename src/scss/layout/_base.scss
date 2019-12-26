@@ -33,5 +33,10 @@ button{
 	flex: 1;
 }
 .container{
-    
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px;
+    @include media(768){
+        padding: 0 16px;
+    }
 }
