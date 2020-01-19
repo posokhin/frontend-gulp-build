@@ -1,8 +1,8 @@
-let gulp = require('gulp'),
+const { src, dest, series, parallel } = require('gulp'),
     sass = require('gulp-sass'),
     sassGlob = require('gulp-sass-glob'),
     watch = require('gulp-watch'),
-    concat = require("gulp-concat"), 
+    concat = require("gulp-concat"),
     autoprefixer = require('gulp-autoprefixer'),
     browserSync = require('browser-sync').create(),
     pug = require('gulp-pug'),
@@ -11,11 +11,10 @@ let gulp = require('gulp'),
     svgSprite = require('gulp-svg-sprite'),
     browserify = require('gulp-browserify'),
     changed = require('gulp-changed');
-    
-    
-/* scss */
-gulp.task('sass', function () {
-    return gulp.src('src/scss/**/*.scss')
+
+
+function Style() {
+    return src('src/scss/**/*.scss')
         .pipe(sassGlob())
         .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer({
@@ -27,59 +26,60 @@ gulp.task('sass', function () {
             format: 'keep-breaks'
         }))
         .pipe(concat('style.css'))
-        .pipe(gulp.dest('./dist/'))
+        .pipe(dest('./dist/'))
         .pipe(browserSync.stream())
-});
-/* scss end */
+}
 
-/* watch */
-gulp.task('watch', function(){
-    browserSync.init({
-        server: {
-            baseDir : './dist/'
-        }
-    });
-    gulp.watch("./src/scss/**/*scss", gulp.series('sass'));
-    gulp.watch("./src/pug/**/*.pug", gulp.series('pug'));
-    gulp.watch("./src/js/*.js", gulp.series('js'));
-});
-/* watch end */
-
-/* pug */
-gulp.task('pug', function() {
-    return gulp.src('./src/pug/*.pug')
-    .pipe(pug({
-        pretty: true
-    }))
-    .pipe(gulp.dest('dist/'))						
-    .pipe(browserSync.reload({
-        stream: true							
-    }));
-});
-/* pug end */
-
-/* js */
-gulp.task('js', function () {
-    return gulp.src('./src/js/main.js')
-        .pipe(browserify())
-        .pipe(gulp.dest('./dist/js/'))
+function Template() {
+    return src('./src/pug/*.pug')
+        .pipe(pug({
+            pretty: true
+        }))
+        .pipe(dest('dist/'))
         .pipe(browserSync.reload({
-            stream: true							
+            stream: true
         }));
-});
-/* end js */
+}
 
-/* svg-sprite */
-gulp.task('svgSprite', function () {
-    return gulp.src('./dist/img/**/*.svg') // svg files for sprite
-    .pipe(svgSprite({
+
+function Scripts() {
+    return src('./src/js/main.js')
+        .pipe(browserify())
+        .pipe(dest('./dist/js/'))
+        .pipe(browserSync.reload({
+            stream: true
+        }));
+}
+
+
+function svg() {
+    return src('./dist/img/**/*.svg') // svg files for sprite
+        .pipe(svgSprite({
             mode: {
                 stack: {
                     sprite: "sprite.svg"  //sprite file name
                 }
             },
         }
-    ))
-    .pipe(gulp.dest('./dist/img/sprite/'));
-});
-/* svg-sprite end */
+        ))
+        .pipe(dest('./dist/img/sprite/'));
+}
+
+function watchFiles() {
+    browserSync.init({
+        server: {
+            baseDir: './dist/'
+        }
+    });
+    watch("./src/scss/**/*scss", series(Style));
+    watch("./src/pug/**/*.pug", series(Template));
+    watch("./src/js/*.js", series(Scripts));
+}
+
+module.exports = {
+    watch: watchFiles,
+    Style: Style,
+    Template: Template,
+    Scripts: Scripts,
+    svg: svg
+}
