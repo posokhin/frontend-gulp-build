@@ -16,7 +16,9 @@ const { src, dest, series, parallel } = require('gulp'),
 function Style() {
     return src('src/scss/**/*.scss')
         .pipe(sassGlob())
-        .pipe(sass().on('error', sass.logError))
+        .pipe(sass({
+            includePaths: ['node_modules']
+        }).on('error', sass.logError))
         .pipe(autoprefixer({
             cascade: false
         }))
