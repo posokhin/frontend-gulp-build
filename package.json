@@ -27,7 +27,7 @@
     "imask": "^5.2.1"
   },
   "dependencies": {
-    "swiper": "^5.2.1",
+    "swiper": "^6.5.1",
     "jquery": "^3.3.1",
     "normalize.css": "^8.0.1"
   },
